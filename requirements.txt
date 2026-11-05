@@ -1,0 +1,5 @@
+requests
+pandas
+matplotlib
+langchain
+# plus the package of your LLM provider, e.g. langchain-openai

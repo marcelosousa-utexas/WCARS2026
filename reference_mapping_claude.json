@@ -1,0 +1,37 @@
+{
+ "_note": "Reference Agent 1 output prepared with Claude (Anthropic) from public field metadata only, Nov 2026. Used with --llm reference and to compare with other models.",
+ "DC": {
+  "mappings": [
+   {"layer": "geometry", "source_field": "SSL", "target_field": "parcel_key_geometry", "unit": null, "confidence": 0.95, "rationale": "Square-Suffix-Lot is DC's parcel identifier and links polygons to the tax roll."},
+   {"layer": "tax_roll", "source_field": "SSL", "target_field": "parcel_key_tax", "unit": null, "confidence": 0.95, "rationale": "Same SSL key in the assessment roll."},
+   {"layer": "geometry", "source_field": "OWNERNAME", "target_field": "owner_name", "unit": null, "confidence": 0.9, "rationale": "Owner name attribute on the District Land polygons."},
+   {"layer": "tax_roll", "source_field": "OWNERNAME", "target_field": "owner_name", "unit": null, "confidence": 0.95, "rationale": "Property owner's name in the roll."},
+   {"layer": "geometry", "source_field": "USE_DESCRIPTION", "target_field": "land_use", "unit": null, "confidence": 0.8, "rationale": "Text description of the property use."},
+   {"layer": "tax_roll", "source_field": "USECODE", "target_field": "land_use", "unit": null, "confidence": 0.9, "rationale": "Property use code in the roll."},
+   {"layer": "geometry", "source_field": "LOT_SF", "target_field": "recorded_land_area", "unit": "sq ft", "confidence": 0.85, "rationale": "Lot square footage stored as an attribute, not computed from the shape."},
+   {"layer": "tax_roll", "source_field": "LANDAREA", "target_field": "recorded_land_area", "unit": "sq ft", "confidence": 0.95, "rationale": "Square footage of land per surveyor."},
+   {"layer": "tax_roll", "source_field": "PHASELAND", "target_field": "assessed_land_value", "unit": "USD", "confidence": 0.85, "rationale": "Current land value (phase-in) in the roll."},
+   {"layer": "tax_roll", "source_field": "ASSESSMENT", "target_field": "assessed_total_value", "unit": "USD", "confidence": 0.9, "rationale": "Current assessed value total."},
+   {"layer": "tax_roll", "source_field": "PREMISEADD", "target_field": "site_address", "unit": null, "confidence": 0.9, "rationale": "Property (premise) address."},
+   {"layer": "geometry", "source_field": "BOOK", "target_field": "deed_reference", "unit": null, "confidence": 0.6, "rationale": "Book of record; page is in PAGE."},
+   {"layer": "tax_roll", "source_field": "INST_NO", "target_field": "deed_reference", "unit": null, "confidence": 0.6, "rationale": "Recording instrument number."}
+  ],
+  "unmapped_targets": ["tax_year"]
+ },
+ "FAIRFAX": {
+  "mappings": [
+   {"layer": "geometry", "source_field": "PIN", "target_field": "parcel_key_geometry", "unit": null, "confidence": 0.9, "rationale": "Parcel Identification Number on the parcel polygons."},
+   {"layer": "parcel_data", "source_field": "PARID", "target_field": "parcel_key_tax", "unit": null, "confidence": 0.95, "rationale": "Parcel ID used by all Tax Administration tables."},
+   {"layer": "legal", "source_field": "PARID", "target_field": "parcel_key_tax", "unit": null, "confidence": 0.95, "rationale": "Same parcel ID in the legal table."},
+   {"layer": "values", "source_field": "PARID", "target_field": "parcel_key_tax", "unit": null, "confidence": 0.95, "rationale": "Same parcel ID in the values table."},
+   {"layer": "parcel_data", "source_field": "LUC_DESC", "target_field": "land_use", "unit": null, "confidence": 0.95, "rationale": "Land use code description."},
+   {"layer": "legal", "source_field": "SQFT", "target_field": "recorded_land_area", "unit": "sq ft", "confidence": 0.85, "rationale": "Deeded land area in square feet."},
+   {"layer": "legal", "source_field": "ACRES", "target_field": "recorded_land_area", "unit": "acres", "confidence": 0.8, "rationale": "Deeded land area in acres."},
+   {"layer": "values", "source_field": "APRLAND", "target_field": "assessed_land_value", "unit": "USD", "confidence": 0.85, "rationale": "Appraised land value, current tax year."},
+   {"layer": "values", "source_field": "APRTOT", "target_field": "assessed_total_value", "unit": "USD", "confidence": 0.85, "rationale": "Appraised total value, current tax year."},
+   {"layer": "legal", "source_field": "ADRSTR", "target_field": "site_address", "unit": null, "confidence": 0.75, "rationale": "Street name of the site address (number in ADRNO)."},
+   {"layer": "parcel_data", "source_field": "TAXYR", "target_field": "tax_year", "unit": null, "confidence": 0.95, "rationale": "Tax year of the record."}
+  ],
+  "unmapped_targets": ["owner_name", "deed_reference"]
+ }
+}
