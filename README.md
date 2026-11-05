@@ -1,16 +1,21 @@
 # Agentic pilot: Fairfax County and Washington, DC
 
-Research prototype of **Agents 1 and 2** from the WCARS 75 presentation, running on US open data.
+Research prototype of **Agents 1 and 2** from the presentation *Multi-Agent Continuous Auditing of Public Real Property* (75th World Continuous Auditing & Reporting Symposium, Rutgers Business School, November 2026), running on US open data.
+
+Author: Marcelo M. S. Sousa. Views are the author's own, not those of TCDF or TCU.
+
+Code of the original audit (R): [CIGAR2025](https://github.com/marcelosousa-utexas/CIGAR2025).
 
 | Agent | What it does | Uses an LLM? |
 |---|---|---|
 | **Agent 1, schema translation** | Reads only the **metadata** (field names, aliases and types) of the Fairfax and DC datasets and proposes how each field fits a single audit schema. For Fairfax, which does not publish owner names, it also proposes which land-use categories indicate public land. | Yes (any LLM) |
+| **Agent 1, dataset profile** | Reads each dataset's description and most frequent values and answers: are the records land or buildings? Who owns them? | Yes (any LLM) |
 | **Human in the loop** | The auditor reviews the proposals in a spreadsheet and sets `approved = Y` or `N`. Agent 2 uses only what was approved. | No |
 | **Agent 2, deterministic engine** | Downloads the public parcels, links the tax roll to the parcel shapes by key (SSL in DC; PARID to PIN in Fairfax), computes land area from the shape and lists the exceptions. | **No** |
 
 Every step is written to `outputs/audit_trail.jsonl` (the audit trail). LLM prompts and answers are stored in `outputs/llm/`.
 
-**Privacy by design:** the LLM never receives property records, only field names and the list of land-use categories.
+**Privacy by design:** the LLM never receives individual property records, only metadata and aggregated value counts (values that appear in at least 20 records).
 
 ## Scope
 
@@ -87,7 +92,7 @@ To change the model, use `--model provider:model`.
 - `summary.json`: numbers for the slide (parcels tested, exceptions by type, run time)
 - `DC_parcels.csv`, `FAIRFAX_parcels.csv`: result per parcel
 - `DC_exceptions.csv`, `FAIRFAX_exceptions.csv`: only parcels with an exception
-- `DC_map.png`, `FAIRFAX_map.png`: map of the parcels, divergent ones in red (needs matplotlib)
+- `DC_map.png`, `FAIRFAX_map.png`: map of the parcels, flagged ones in red (needs matplotlib)
 - `audit_trail.jsonl`: audit trail
 - `llm/`: LLM prompts and answers
 
@@ -114,7 +119,7 @@ Areas are computed in square feet, with data reprojected by the server: EPSG 224
 
 - This is a research prototype, not a production system.
 - In Fairfax, "public land" is defined by the land-use categories approved by the auditor, because owner names are not published. These categories include all levels of government.
-- In DC, the "District Land" layer mixes land parcels with records of single buildings or facilities (for example, a charter school inside a larger federal parcel). These records can produce false area alerts.
+- In DC, the "District Land" layer mixes land parcels with records of single buildings or facilities (for example, a charter school inside a larger federal parcel). Without the dataset profile step, these records produce false area alerts.
 - An exception is an **alert for the auditor to review**, not a conclusion. Some area differences have a legitimate explanation.
 - API addresses may change. If one fails, the error message shows which one.
 
@@ -130,3 +135,15 @@ Send the error message and the file `outputs/audit_trail.jsonl`.
 python check_parcel_area.py                   # default: 0191 01  0003 (Colvin Run)
 python check_parcel_area.py "0502 10F 0001"
 ```
+
+## Data sources
+
+Open data published by the District of Columbia (DC GIS, Office of the Chief Technology Officer) and by Fairfax County, Virginia (ArcGIS REST services). Endpoints are listed at the top of `agentic_pilot.py`. Use of the data follows each publisher's terms.
+
+## AI assistance
+
+Developed with AI-assisted coding tools. All code was reviewed, run and validated by the author.
+
+## License
+
+MIT. See `LICENSE`.
