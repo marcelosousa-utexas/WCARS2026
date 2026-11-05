@@ -1,0 +1,7 @@
+.env
+*.env
+llm_local.py
+__pycache__/
+*.pyc
+.vscode/
+outputs/
